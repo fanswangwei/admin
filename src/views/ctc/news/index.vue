@@ -19,9 +19,15 @@
           </el-select>
         </div>
     </div>
-		<el-table :data="newsList" border style="width: 100%" v-loading="loading">
+		<el-table :data="newsList" border style="width: 100%" v-loading="loading" class="news-list-table">
 			<el-table-column prop="title" align="center" label="标题"></el-table-column>
-			<el-table-column prop="remark" align="center" label="摘要"></el-table-column>
+			<el-table-column prop="remark" align="center" label="摘要">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" :content="scope.row.remark" placement="top">
+            <p class="news-remark">{{scope.row.remark}}</p>
+          </el-tooltip>
+        </template>
+      </el-table-column>
 			<el-table-column prop="type" align="center" label="栏目">
         <template slot-scope="scope">
           <span>{{filterType(scope.row.type)}}</span>
@@ -119,7 +125,6 @@ export default {
     filterType(key){
       if (!key) {return;} 
       let typeArr = key && key.split('_');
-      console.log(typeArr)
       let typeMain = '', type = '';
       switch (typeArr[0]) {
         case 'us': typeMain = '关于我们'; break;
@@ -207,6 +212,17 @@ export default {
     margin-bottom: 20px;
     span {
       margin-right: 25px;
+    }
+  }
+  .news-list-table {
+    .news-remark {
+      display: -webkit-box;
+      overflow: hidden;
+      white-space: normal !important;
+      text-overflow: ellipsis;
+      word-wrap: break-word;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical
     }
   }
   .page-box {
