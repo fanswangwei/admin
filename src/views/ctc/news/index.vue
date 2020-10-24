@@ -66,7 +66,7 @@ export default {
 	name: '',
 	data() {
 		return {
-      newsList: [{}],
+      newsList: [],
       page: {
         total: 100,
         pageNum: 1,
