@@ -46,6 +46,7 @@
 						<el-upload
 							class="avatar-uploader"
 							action="//8.129.3.87:9999/upload"
+							ref="newsCoverUpload"
 							:show-file-list="false"
 							:limit="1"
 							:on-success="handleAvatarSuccess">
@@ -196,8 +197,8 @@ export default {
 			})
 		},
 		handleAvatarSuccess(res, file) {
-			console.log(res, file);
 			this.newsForm.coverUrl = res.data[0];
+			this.$refs.newsCoverUpload.clearFiles()
 		},
 	}
 };
