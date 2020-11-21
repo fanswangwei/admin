@@ -67,7 +67,7 @@
   </div>
 </template>
 <script>
-import { addNews } from "@/api/api";
+import { addNews, getNews, editNews } from "@/api/api";
 import editor from "wangeditor";
 import {
   checkNumber,
@@ -134,8 +134,9 @@ export default {
     };
   },
   created() {
-    if (this.$route && this.$route.query && this.$route.query.newsId) {
-      this.title = "编辑新闻";
+    if (this.$route && this.$route.query && this.$route.query.id) {
+			this.title = "编辑新闻";
+			this.getNewDetail(this.$route.query.id)
     }
   },
   mounted() {
@@ -177,28 +178,61 @@ export default {
 				return false;
 			}
 			this.loading = true;
-			addNews(params).then( res => {
-				if(res.code == 200){
-					this.$message({
-						message: '新闻新建成功！',
-						type: 'success'
-					});
-					this.editor.txt.html('');
-					this.newsForm = {
-						title: '',
-						remark: '',
-						type: '',
-						coverUrl: '',
-						content: ''
+			if(params._id){
+				editNews(params).then( res => {
+					if(res.code == 200){
+						this.$message({
+							message: '新闻更新成功！',
+							type: 'success'
+						});
+						this.editor.txt.html('');
+						this.newsForm = {
+							title: '',
+							remark: '',
+							type: '',
+							coverUrl: '',
+							content: ''
+						}
 					}
-				}
-			}).finally(() => {
-				this.loading = false;
-			})
+				}).finally(() => {
+					this.loading = false;
+				})
+			}else {
+				addNews(params).then( res => {
+					if(res.code == 200){
+						this.$message({
+							message: '新闻新建成功！',
+							type: 'success'
+						});
+						this.editor.txt.html('');
+						this.newsForm = {
+							title: '',
+							remark: '',
+							type: '',
+							coverUrl: '',
+							content: ''
+						}
+					}
+				}).finally(() => {
+					this.loading = false;
+				})
+			}
 		},
 		handleAvatarSuccess(res, file) {
 			this.newsForm.coverUrl = res.data[0];
 			this.$refs.newsCoverUpload.clearFiles()
+		},
+		getNewDetail(id) {
+			let params = {
+				_id: id,
+			}
+			getNews(params).then((res) => {
+				console.log(res)
+				if (res.code == 200) {
+					this.newsForm = res.data[0]
+					this.editor.txt.html(this.newsForm.content);
+				}
+			})
 		},
 	}
 };

@@ -16,6 +16,10 @@ export function logout(json) {
 export function addNews(json) {
   return  postData("/news/add", json)
 }
+// editNews
+export function editNews(json) {
+  return  postData("/news/edit", json)
+}
 // getnews
 export function getNews(json) {
   return  getData("/news/get", json)
